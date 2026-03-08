@@ -12,40 +12,43 @@ The objective of this project is to create a luxurious and interactive landing p
 ### 3. Core Features
 
 #### 3.1. Landing Page
-- **Hero Section**: High-impact visual greeting with smooth animations and a clear call-to-action (RSVP).
-- **Gallery**: A masonry or grid-based showcase of celebratory images.
-- **Interactive Itinerary**: A chronology of events (e.g., Dinner, Party) during the celebration weekend.
-- **Planning Tools**: Quick links and cards for logistics (Hotels, Registry, Travel, Transportation).
-- **RSVP Form**: A user-friendly form to capture attendance, guest counts, and dietary requirements.
+- **Hero Section**: High-impact visual greeting with smooth animations, a **live countdown timer**, and a clear call-to-action (RSVP).
+- **Gallery (The Muse)**: A premium masonry-style grid showcase of real celebratory images with interactive glassmorphism hover effects.
+- **Interactive Itinerary**: A chronology of events fetched dynamically from Supabase, featuring **intelligent chronological sorting** by day and time.
+- **Planning Tools**: Curated links for guest logistics (Accommodations and Travel Info). 
+- **RSVP Form**: A user-friendly form with guest lookup, attendance capturing for multiple events (Gala/Brunch), guest names management, and dietary requirements.
 
 #### 3.2. Accommodations Page (/hotel)
 - **Hotel Options**: Detailed cards for Sheraton Grand Panama and Aloft Panama.
 - **Booking Integration**: Special rates display and a "Copy Subject Line" feature for direct booking via email.
 - **Policies**: Clear explanations of breakfast inclusions and children's policies.
 
-#### 3.3. Admin Dashboard (/admin password protected)
-- **RSVP Management**: A way to view and track all guest responses.
-- **Itinerary Management**: Ability to update event details (dates, times, locations) in real-time. (Note: Current implementation uses JSON storage).
+#### 3.3. Admin Dashboard (/admin)
+- **Security**: Server-side password verification (`ADMIN_PASSWORD`) with secure session cookies.
+- **Real-time Synchronization**: Live sync indicators and manual refresh buttons for RSVPs and Itinerary data.
+- **RSVP Management**: Ability to view, search, and delete guest responses directly from the dashboard.
+- **Itinerary Management**: Full CRUD capabilities for event management (Create, Read, Update, Delete) with multi-line description support.
 
 #### 3.4. Visual & Experience Design
-- **Theme**: Soft UI / Glassmorphism.
+- **Theme**: Premium Soft UI / Glassmorphism.
 - **Palette**: Rose Water, Deep Plum, Bright Fuchsia, and Metallic Gold.
-- **Interactions**: Framer Motion powered entry animations and hover effects for a premium feel.
+- **Interactions**: Framer Motion powered entry animations, cascading grid reveals, and micro-interactions.
 
 ### 4. Technical Stack
 - **Framework**: Next.js 14 (App Router)
-- **Logic**: React 18, TypeScript
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-- **Data Model**: Local JSON files (`src/data/itinerary.json`, `src/data/rsvps.json`)
+- **Database**: **Supabase** (PostgreSQL) for real-time persistence and data management.
+- **Infrastructure**: **GitHub Actions** for automated CI/CD deployment.
+- **Hosting**: Linux VPS with **PM2** for process management.
+- **Email**: **Resend** for automated RSVP confirmations.
+- **Logic/Styling**: React 18, TypeScript, Tailwind CSS, Lucide React, Framer Motion.
 
 ### 5. Success Metrics
 - 100% RSVP rate for invited guests.
-- Low Friction: Guests successfully book hotels using the provided instructions.
-- Modern Appeal: A high-quality visual experience that reflects the milestone nature of the event.
+- Seamless Admin Experience: Instant updates to the itinerary without code changes.
+- Security: Protected guest information and administrative access.
+- Modern Appeal: A flagship visual experience that reflects the milestone nature of the event.
 
-### 6. Future Enhancements
-- Real-time RSVP notifications (Email/SMS).
-- Live countdown timer to the main event.
-- Integration with supabase for more robust data persistence of visitor's information
+### 6. Maintenance & DevOps
+- **Deployment**: Automatic deployment to VPS upon pushes to the `main` branch.
+- **Data Safety**: Environment variables managed via GitHub Secrets and `.env`.
+- **Sync**: Real-time Supabase subscriptions for immediate admin UI updates.

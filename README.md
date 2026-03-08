@@ -26,11 +26,11 @@ Designed with a premium **Soft UI / Glassmorphism** aesthetic, featuring elegant
 
 ### 🏠 Main Landing Page (`/`)
 A high-engagement welcome experience comprising:
-- **Hero**: Welcome message with smooth Framer Motion animations.
-- **Gallery**: A visual journey showcase.
-- **Itinerary**: Interactive event schedule (Dinner, Party, etc.).
-- **Planning Tools**: One-stop-shop for guest logistics.
-- **RSVP Form**: Interactive attendance confirmation.
+- **Hero**: Live countdown and welcome message with smooth Framer Motion animations.
+- **Gallery (The Muse)**: A premium visual journey showcase with glassmorphism hover effects.
+- **Itinerary**: Interactive event schedule fetched dynamically from Supabase with chronological sorting.
+- **Planning Tools**: Essential logistics (Accommodations and Travel Info). 
+- **RSVP Form**: Interactive attendance confirmation with live database integration.
 
 ### 🏨 Hotel Reservations Page (`/hotel`)
 A dedicated booking portal featuring:
@@ -40,18 +40,20 @@ A dedicated booking portal featuring:
 
 ### 🛡️ Admin Dashboard (`/admin`)
 A secure management interface to:
-- **Monitor RSVPs**: View real-time guest responses and dietary needs.
-- **Manage Schedule**: CRUD operations for itinerary events (Stored in `src/data`).
+- **Security**: Password protected access (`ADMIN_PASSWORD`) with secure sessions.
+- **RSVPs**: Real-time management and deletion of guest responses.
+- **Events**: Full CRUD (Create/Update/Delete) for the celebration itinerary.
+- **Live Sync**: Visual indicators for real-time data synchronization.
 
 ---
 
 ## ✨ Features & Design
 
-- 🎨 **Luxury Aesthetic**: Modern Glassmorphism and Neumorphism using a curated HSL color palette.
+- 🎨 **Luxury Aesthetic**: Modern Glassmorphism and Neumorphism using a curated color palette.
 - ⚡ **Performance**: Optimized Next.js 14 App Router for rapid page loads and SEO.
-- ✨ **Fluid Interactions**: Micro-animations and entrance effects powered by Framer Motion.
-- 📱 **Responsive Design**: Flawless experience across mobile, tablet, and desktop.
-- 💌 **Data Persistence**: Local JSON-based storage for easy updates and minimal backend complexity.
+- 🗄️ **Database Driven**: All events and RSVPs are managed via **Supabase** for real-time reliability.
+- 🛫 **Automated CI/CD**: Seamless deployment to VPS via **GitHub Actions**.
+- ✉️ **Email Automation**: Instant RSVP confirmation emails via **Resend**.
 
 ---
 
