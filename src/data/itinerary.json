@@ -1,0 +1,62 @@
+[
+    {
+        "id": "6",
+        "day": "Thursday, July 23",
+        "title": "Panama Canal Tour",
+        "time": "10:00 AM",
+        "description": "Experience the world-renowned Panama Canal. A guided tour of the Miraflores Locks to witness the magnificent engineering in action.",
+        "dressCode": "Casual & Comfortable",
+        "location": "Miraflores Locks, Panama Canal",
+        "isHighlight": false
+    },
+    {
+        "id": "1",
+        "day": "Thursday, July 23",
+        "title": "Welcome Cocktails",
+        "time": "6:00 PM",
+        "description": "Sunset drinks at the rooftop lounge. Meet, mingle, and toast to the journey ahead in Panama City.",
+        "dressCode": "Casual Chic",
+        "location": "Aloft Rooftop Lounge",
+        "isHighlight": false
+    },
+    {
+        "id": "2",
+        "day": "Friday, July 24",
+        "title": "Casco Viejo Tour",
+        "time": "10:00 AM",
+        "description": "A guided morning walk through the historic charm of Casco Viejo, followed by local gourmet coffee.",
+        "dressCode": "Resort Casual",
+        "location": "Casco Viejo District",
+        "isHighlight": false
+    },
+    {
+        "id": "3",
+        "day": "Friday, July 24",
+        "title": "Intimate Dinner",
+        "time": "7:00 PM",
+        "description": "An intimate pre-birthday dinner with closest friends and family. Stories, laughter, and memories.",
+        "dressCode": "Cocktail Attire",
+        "location": "Sheraton Grand Dining Room",
+        "isHighlight": false
+    },
+    {
+        "id": "4",
+        "day": "Saturday, July 25",
+        "title": "The 40th Birthday Party",
+        "time": "7:00 PM",
+        "description": "The main event! An evening of dinner, dancing, and celebration. Gold and glamour encouraged.",
+        "dressCode": "Formal Attire",
+        "location": "Sheraton Grand, Panama. Room - Taboga Ballroom.",
+        "isHighlight": true
+    },
+    {
+        "id": "5",
+        "day": "Sunday, July 26",
+        "title": "Farewell Brunch",
+        "time": "11:00 AM",
+        "description": "A relaxed brunch to say goodbye and recap the unforgettable weekend before departures.",
+        "dressCode": "Sunday Best",
+        "location": "Garden Terrace",
+        "isHighlight": false
+    }
+]
