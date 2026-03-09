@@ -554,9 +554,9 @@ export default function AdminPage() {
                                     <div className="mb-4">
                                         <p className="text-[10px] text-purple-400 uppercase font-bold mb-2">Event Attendance</p>
                                         <div className="flex flex-wrap gap-2">
-                                            {Object.entries(rsvp.attendingEvents || {}).filter(([_, attending]) => attending).length > 0 ? (
+                                            {Object.entries(rsvp.attendingEvents || {}).filter(([, attending]) => attending).length > 0 ? (
                                                 Object.entries(rsvp.attendingEvents || {})
-                                                    .filter(([_, attending]) => attending)
+                                                    .filter(([, attending]) => attending)
                                                     .map(([event]) => (
                                                         <span key={event} className="px-2 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-lg border border-amber-200">
                                                             {event}

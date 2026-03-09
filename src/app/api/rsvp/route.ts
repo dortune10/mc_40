@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
                                 <ul style="list-style: none; padding: 0;">
                                     <li><strong>Guests:</strong> ${totalGuests} (${rsvpData.adultCount} adults, ${rsvpData.childCount} children)</li>
                                     <li><strong>Attending:</strong> ${Object.entries(rsvpData.attendingEvents || {})
-                            .filter(([_, checked]) => checked)
+                            .filter(([, checked]) => checked)
                             .map(([title]) => title)
                             .join(', ') || 'None'}</li>
                                 </ul>
