@@ -38,9 +38,7 @@ interface RSVP {
     firstName: string;
     lastName: string;
     email: string;
-    attendingGala: boolean;
-    attendingBrunch: boolean;
-    dietaryNotes: string;
+    attendingEvents: Record<string, boolean>;
     adultCount: number;
     childCount: number;
     adultNames: string[];
@@ -52,9 +50,9 @@ interface RSVP {
 interface GuestItem {
     name: string;
     type: string;
-    diet: string;
+    attendingCount: number;
     primary: string;
-    [key: string]: string;
+    [key: string]: string | number;
 }
 
 const emptyEvent: Omit<Event, 'id'> = {
@@ -212,14 +210,16 @@ export default function AdminPage() {
     const sortedGuests = useMemo(() => {
         const guests: GuestItem[] = rsvps.flatMap(rsvp => {
             const items: GuestItem[] = [];
+            const attendingCount = Object.values(rsvp.attendingEvents || {}).filter(Boolean).length;
+
             rsvp.adultNames.forEach(name => {
-                if (name.trim()) items.push({ name: name.trim(), type: 'Adult', diet: rsvp.dietaryNotes || '', primary: rsvp.firstName + ' ' + rsvp.lastName });
+                if (name.trim()) items.push({ name: name.trim(), type: 'Adult', attendingCount, primary: rsvp.firstName + ' ' + rsvp.lastName });
             });
             rsvp.childNames.forEach(name => {
-                if (name.trim()) items.push({ name: name.trim(), type: 'Child', diet: rsvp.dietaryNotes || '', primary: rsvp.firstName + ' ' + rsvp.lastName });
+                if (name.trim()) items.push({ name: name.trim(), type: 'Child', attendingCount, primary: rsvp.firstName + ' ' + rsvp.lastName });
             });
             if (items.length === 0) {
-                items.push({ name: rsvp.firstName + ' ' + rsvp.lastName, type: 'Adult', diet: rsvp.dietaryNotes || '', primary: rsvp.firstName + ' ' + rsvp.lastName });
+                items.push({ name: rsvp.firstName + ' ' + rsvp.lastName, type: 'Adult', attendingCount, primary: rsvp.firstName + ' ' + rsvp.lastName });
             }
             return items;
         });
@@ -539,22 +539,31 @@ export default function AdminPage() {
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                                        <div className="bg-purple-50 p-2 rounded-lg text-center">
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        <div className="bg-purple-50 px-4 py-2 rounded-lg text-center flex-1">
                                             <p className="text-[10px] text-purple-400 uppercase font-bold">Adults</p>
                                             <p className="text-lg font-bold text-purple-900">{rsvp.adultCount}</p>
                                         </div>
-                                        <div className="bg-purple-50 p-2 rounded-lg text-center">
+                                        <div className="bg-purple-50 px-4 py-2 rounded-lg text-center flex-1">
                                             <p className="text-[10px] text-purple-400 uppercase font-bold">Kids</p>
                                             <p className="text-lg font-bold text-purple-900">{rsvp.childCount}</p>
                                         </div>
-                                        <div className={`p-2 rounded-lg text-center ${rsvp.attendingGala ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-400'}`}>
-                                            <p className="text-[10px] uppercase font-bold">Gala</p>
-                                            <p className="text-sm font-bold uppercase">{rsvp.attendingGala ? 'Yes' : 'No'}</p>
-                                        </div>
-                                        <div className={`p-2 rounded-lg text-center ${rsvp.attendingBrunch ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-400'}`}>
-                                            <p className="text-[10px] uppercase font-bold">Brunch</p>
-                                            <p className="text-sm font-bold uppercase">{rsvp.attendingBrunch ? 'Yes' : 'No'}</p>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <p className="text-[10px] text-purple-400 uppercase font-bold mb-2">Event Attendance</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {Object.entries(rsvp.attendingEvents || {}).filter(([_, attending]) => attending).length > 0 ? (
+                                                Object.entries(rsvp.attendingEvents || {})
+                                                    .filter(([_, attending]) => attending)
+                                                    .map(([event]) => (
+                                                        <span key={event} className="px-2 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-lg border border-amber-200">
+                                                            {event}
+                                                        </span>
+                                                    ))
+                                            ) : (
+                                                <span className="text-xs text-gray-400 italic">No events selected</span>
+                                            )}
                                         </div>
                                     </div>
                                     {rsvp.adultNames.length > 0 && (
@@ -565,11 +574,6 @@ export default function AdminPage() {
                                     {rsvp.childNames.length > 0 && (
                                         <p className="text-sm text-purple-700 mb-1">
                                             <span className="font-bold">Kids:</span> {rsvp.childNames.filter(n => n).join(', ')}
-                                        </p>
-                                    )}
-                                    {rsvp.dietaryNotes && (
-                                        <p className="text-sm text-rose-600 bg-rose-50 px-2 py-1 rounded-lg inline-block my-2">
-                                            ⚠️ {rsvp.dietaryNotes}
                                         </p>
                                     )}
                                     {rsvp.message && <p className="text-sm italic text-purple-400 mt-2 border-l-2 border-purple-200 pl-3">&quot;{rsvp.message}&quot;</p>}
@@ -587,7 +591,7 @@ export default function AdminPage() {
                                         {[
                                             { label: 'Guest Name', key: 'name' },
                                             { label: 'Type', key: 'type' },
-                                            { label: 'Dietary Restrictions', key: 'diet' },
+                                            { label: 'Events', key: 'attendingCount' },
                                             { label: 'Reserved By', key: 'primary' }
                                         ].map((col) => (
                                             <th
@@ -617,8 +621,10 @@ export default function AdminPage() {
                                                         {(guest.type || 'ADULT').toUpperCase()}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4 text-purple-600">
-                                                    {guest.diet || <span className="text-purple-300">None</span>}
+                                                <td className="px-6 py-4">
+                                                    <span className="text-purple-600 font-bold">
+                                                        {guest.attendingCount} selected
+                                                    </span>
                                                 </td>
                                                 <td className="px-6 py-4 text-sm text-purple-400 italic">
                                                     {guest.primary}

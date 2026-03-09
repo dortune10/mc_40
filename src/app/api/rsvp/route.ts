@@ -21,9 +21,11 @@ export async function POST(request: NextRequest) {
             first_name: rsvpData.firstName,
             last_name: rsvpData.lastName,
             email: rsvpData.email,
-            attending_gala: rsvpData.attendingGala,
-            attending_brunch: rsvpData.attendingBrunch,
-            dietary_notes: rsvpData.dietaryNotes,
+            // Map specific events back to their original columns for backward compatibility if found
+            attending_gala: rsvpData.attendingEvents?.['The 40th Gala'] || false,
+            attending_brunch: rsvpData.attendingEvents?.['Farewell Brunch'] || false,
+            // Re-purpose dietary_notes to store all event selections as a JSON string
+            dietary_notes: rsvpData.attendingEvents ? JSON.stringify(rsvpData.attendingEvents) : null,
             adult_count: rsvpData.adultCount || 1,
             child_count: rsvpData.childCount || 0,
             adult_names: rsvpData.adultNames ? JSON.stringify(rsvpData.adultNames) : null,
@@ -77,9 +79,10 @@ export async function POST(request: NextRequest) {
                                 <h3 style="margin-top: 0; color: #701A75;">Reservation Details:</h3>
                                 <ul style="list-style: none; padding: 0;">
                                     <li><strong>Guests:</strong> ${totalGuests} (${rsvpData.adultCount} adults, ${rsvpData.childCount} children)</li>
-                                    <li><strong>Attending Gala:</strong> ${rsvpData.attendingGala ? 'Yes' : 'No'}</li>
-                                    <li><strong>Attending Brunch:</strong> ${rsvpData.attendingBrunch ? 'Yes' : 'No'}</li>
-                                    ${rsvpData.dietaryNotes ? `<li><strong>Dietary Notes:</strong> ${rsvpData.dietaryNotes}</li>` : ''}
+                                    <li><strong>Attending:</strong> ${Object.entries(rsvpData.attendingEvents || {})
+                            .filter(([_, checked]) => checked)
+                            .map(([title]) => title)
+                            .join(', ') || 'None'}</li>
                                 </ul>
                             </div>
 
@@ -134,9 +137,7 @@ export async function GET(request: NextRequest) {
                 ...data,
                 firstName: data.first_name,
                 lastName: data.last_name,
-                attendingGala: data.attending_gala,
-                attendingBrunch: data.attending_brunch,
-                dietaryNotes: data.dietary_notes,
+                attendingEvents: data.dietary_notes ? JSON.parse(data.dietary_notes) : {},
                 adultCount: data.adult_count,
                 childCount: data.child_count,
                 adultNames: data.adult_names ? JSON.parse(data.adult_names) : [data.first_name + ' ' + data.last_name],
@@ -164,9 +165,7 @@ export async function GET(request: NextRequest) {
             ...item,
             firstName: item.first_name,
             lastName: item.last_name,
-            attendingGala: item.attending_gala,
-            attendingBrunch: item.attending_brunch,
-            dietaryNotes: item.dietary_notes,
+            attendingEvents: item.dietary_notes ? JSON.parse(item.dietary_notes) : {},
             adultCount: item.adult_count,
             childCount: item.child_count,
             adultNames: item.adult_names ? JSON.parse(item.adult_names) : [],

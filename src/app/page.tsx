@@ -68,7 +68,7 @@ export default async function Home() {
             <Gallery />
             <Itinerary events={events} />
             <PlanningTools />
-            <RSVPForm />
+            <RSVPForm events={events} />
             <Footer />
         </main>
     );

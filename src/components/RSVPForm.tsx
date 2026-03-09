@@ -4,14 +4,23 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Check, Loader2, Users, Search, Plus, Minus, UserPlus } from 'lucide-react';
 
-export default function RSVPForm() {
+interface ItineraryItem {
+    id: string;
+    day: string;
+    title: string;
+    time: string;
+}
+
+interface RSVPFormProps {
+    events: ItineraryItem[];
+}
+
+export default function RSVPForm({ events }: RSVPFormProps) {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
-        attendingGala: false,
-        attendingBrunch: false,
-        dietaryNotes: '',
+        attendingEvents: {} as Record<string, boolean>,
         message: '',
         adultCount: 1,
         childCount: 0,
@@ -27,6 +36,19 @@ export default function RSVPForm() {
     ) => {
         const { name, value, type } = e.target;
         const checked = (e.target as HTMLInputElement).checked;
+
+        if (name.startsWith('event-')) {
+            const eventTitle = name.replace('event-', '');
+            setFormData(prev => ({
+                ...prev,
+                attendingEvents: {
+                    ...prev.attendingEvents,
+                    [eventTitle]: checked
+                }
+            }));
+            return;
+        }
+
         setFormData((prev) => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value,
@@ -70,6 +92,7 @@ export default function RSVPForm() {
                 const data = await res.json();
                 setFormData({
                     ...data,
+                    attendingEvents: data.attendingEvents || (data.dietaryNotes ? JSON.parse(data.dietaryNotes) : {}),
                     adultNames: data.adultNames.length > 0 ? data.adultNames : [data.firstName + ' ' + data.lastName],
                     childNames: data.childNames || [],
                 });
@@ -109,9 +132,7 @@ export default function RSVPForm() {
                     firstName: '',
                     lastName: '',
                     email: '',
-                    attendingGala: false,
-                    attendingBrunch: false,
-                    dietaryNotes: '',
+                    attendingEvents: {},
                     message: '',
                     adultCount: 1,
                     childCount: 0,
@@ -287,26 +308,29 @@ export default function RSVPForm() {
                                             )}
                                         </div>
 
-                                        {/* Events */}
+                                        {/* Dynamic Events */}
                                         <div className="space-y-3">
                                             <p className="text-purple-200 font-medium">Attending:</p>
-                                            <div className="grid sm:grid-cols-2 gap-3">
-                                                <label className="flex items-center gap-3 glass-dark p-4 rounded-2xl cursor-pointer group">
-                                                    <input type="checkbox" name="attendingGala" checked={formData.attendingGala} onChange={handleChange} className="checkbox-custom" />
-                                                    <span className="text-sm">The 40th Gala</span>
-                                                </label>
-                                                <label className="flex items-center gap-3 glass-dark p-4 rounded-2xl cursor-pointer group">
-                                                    <input type="checkbox" name="attendingBrunch" checked={formData.attendingBrunch} onChange={handleChange} className="checkbox-custom" />
-                                                    <span className="text-sm">Farewell Brunch</span>
-                                                </label>
+                                            <div className="grid gap-3">
+                                                {events.map((event) => (
+                                                    <label key={event.id} className="flex items-center gap-3 glass-dark p-4 rounded-2xl cursor-pointer group">
+                                                        <input
+                                                            type="checkbox"
+                                                            name={`event-${event.title}`}
+                                                            checked={!!formData.attendingEvents[event.title]}
+                                                            onChange={handleChange}
+                                                            className="checkbox-custom"
+                                                        />
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-semibold">{event.title}</span>
+                                                            <span className="text-xs text-purple-300 font-light">{event.day} • {event.time}</span>
+                                                        </div>
+                                                    </label>
+                                                ))}
                                             </div>
                                         </div>
 
-                                        {/* Dietary & Message */}
-                                        <div>
-                                            <label className="label-text">Dietary Restrictions</label>
-                                            <input type="text" name="dietaryNotes" value={formData.dietaryNotes} onChange={handleChange} className="input-dark" placeholder="None, Vegan, Allergies..." />
-                                        </div>
+                                        {/* Message */}
                                         <div>
                                             <label className="label-text">Message for Marien</label>
                                             <textarea name="message" value={formData.message} onChange={handleChange} rows={3} className="input-dark resize-none" placeholder="Share a wish..." />
