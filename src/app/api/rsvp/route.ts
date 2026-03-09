@@ -137,11 +137,23 @@ export async function GET(request: NextRequest) {
                 ...data,
                 firstName: data.first_name,
                 lastName: data.last_name,
-                attendingEvents: data.dietary_notes ? JSON.parse(data.dietary_notes) : {},
+                attendingEvents: (() => {
+                    if (!data.dietary_notes) return {};
+                    try {
+                        const parsed = JSON.parse(data.dietary_notes);
+                        return typeof parsed === 'object' ? parsed : {};
+                    } catch {
+                        return {};
+                    }
+                })(),
                 adultCount: data.adult_count,
                 childCount: data.child_count,
-                adultNames: data.adult_names ? JSON.parse(data.adult_names) : [data.first_name + ' ' + data.last_name],
-                childNames: data.child_names ? JSON.parse(data.child_names) : [],
+                adultNames: (() => {
+                    try { return data.adult_names ? JSON.parse(data.adult_names) : [data.first_name + ' ' + data.last_name]; } catch { return [data.first_name + ' ' + data.last_name]; }
+                })(),
+                childNames: (() => {
+                    try { return data.child_names ? JSON.parse(data.child_names) : []; } catch { return []; }
+                })(),
                 submittedAt: data.submitted_at
             });
         }
@@ -165,11 +177,23 @@ export async function GET(request: NextRequest) {
             ...item,
             firstName: item.first_name,
             lastName: item.last_name,
-            attendingEvents: item.dietary_notes ? JSON.parse(item.dietary_notes) : {},
+            attendingEvents: (() => {
+                if (!item.dietary_notes) return {};
+                try {
+                    const parsed = JSON.parse(item.dietary_notes);
+                    return typeof parsed === 'object' ? parsed : {};
+                } catch {
+                    return {};
+                }
+            })(),
             adultCount: item.adult_count,
             childCount: item.child_count,
-            adultNames: item.adult_names ? JSON.parse(item.adult_names) : [],
-            childNames: item.child_names ? JSON.parse(item.child_names) : [],
+            adultNames: (() => {
+                try { return item.adult_names ? JSON.parse(item.adult_names) : []; } catch { return []; }
+            })(),
+            childNames: (() => {
+                try { return item.child_names ? JSON.parse(item.child_names) : []; } catch { return []; }
+            })(),
             submittedAt: item.submitted_at
         }));
 

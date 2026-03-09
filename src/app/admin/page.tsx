@@ -139,8 +139,8 @@ export default function AdminPage() {
             ]);
             const eventsData = await eventsRes.json();
             const rsvpsData = await rsvpsRes.json();
-            setEvents(eventsData);
-            setRsvps(rsvpsData);
+            setEvents(Array.isArray(eventsData) ? eventsData : []);
+            setRsvps(Array.isArray(rsvpsData) ? rsvpsData : []);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -208,6 +208,7 @@ export default function AdminPage() {
     };
 
     const sortedGuests = useMemo(() => {
+        if (!Array.isArray(rsvps)) return [];
         const guests: GuestItem[] = rsvps.flatMap(rsvp => {
             const items: GuestItem[] = [];
             const attendingCount = Object.values(rsvp.attendingEvents || {}).filter(Boolean).length;
