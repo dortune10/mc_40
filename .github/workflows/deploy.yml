@@ -39,5 +39,6 @@ jobs:
             npm install
             npm run build
             
-            # Restart with updated environment and path
-            pm2 restart mc_40 --update-env || pm2 start npm --name "mc_40" -- run start
+            # Use absolute path to next and clean start to avoid 'next not found' or path issues
+            pm2 delete mc_40 || true
+            pm2 start "npm run start" --name "mc_40"
