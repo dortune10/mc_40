@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+interface ItineraryItem {
+    id: string;
+    day: string;
+    title: string;
+    time: string;
+    description: string;
+    dress_code: string;
+    location: string;
+    is_highlight: boolean;
+}
+
 // GET all events
 export async function GET() {
     try {
@@ -12,16 +23,17 @@ export async function GET() {
         if (error) throw error;
 
         // Map back to camelCase for the UI
-        const mappedData = data.map((item: any) => ({
+        const mappedData = data.map((item: ItineraryItem) => ({
             ...item,
             dressCode: item.dress_code,
             isHighlight: item.is_highlight
         }));
 
         return NextResponse.json(mappedData);
-    } catch (error: any) {
-        console.error('Error fetching itinerary:', error.message || error);
-        return NextResponse.json({ error: 'Failed to fetch events', details: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error fetching itinerary:', message);
+        return NextResponse.json({ error: 'Failed to fetch events', details: message }, { status: 500 });
     }
 }
 
@@ -49,9 +61,10 @@ export async function POST(request: NextRequest) {
 
         if (error) throw error;
         return NextResponse.json(data, { status: 201 });
-    } catch (error: any) {
-        console.error('Error creating itinerary event:', error.message || error);
-        return NextResponse.json({ error: 'Failed to create event', details: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error creating itinerary event:', message);
+        return NextResponse.json({ error: 'Failed to create event', details: message }, { status: 500 });
     }
 }
 
@@ -85,9 +98,10 @@ export async function PUT(request: NextRequest) {
 
         if (error) throw error;
         return NextResponse.json(data);
-    } catch (error: any) {
-        console.error('Error updating itinerary event:', error.message || error);
-        return NextResponse.json({ error: 'Failed to update event', details: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error updating itinerary event:', message);
+        return NextResponse.json({ error: 'Failed to update event', details: message }, { status: 500 });
     }
 }
 

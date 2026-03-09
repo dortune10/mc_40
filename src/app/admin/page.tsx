@@ -16,7 +16,6 @@ import {
     Shirt,
     Star,
     Users,
-    Check,
     ArrowUpDown,
     RefreshCcw,
     LogOut
@@ -48,6 +47,14 @@ interface RSVP {
     childNames: string[];
     message: string;
     submittedAt: string;
+}
+
+interface GuestItem {
+    name: string;
+    type: string;
+    diet: string;
+    primary: string;
+    [key: string]: string;
 }
 
 const emptyEvent: Omit<Event, 'id'> = {
@@ -197,15 +204,14 @@ export default function AdminPage() {
             if (res.ok) {
                 await fetchData();
             }
-        } catch (error) {
-            console.error('Error deleting RSVP:', error);
+        } catch {
+            console.error('Error deleting RSVP');
         }
     };
 
-    // Flatten and sort guest list for the Guests tab
     const sortedGuests = useMemo(() => {
-        const guests: any[] = rsvps.flatMap(rsvp => {
-            const items = [];
+        const guests: GuestItem[] = rsvps.flatMap(rsvp => {
+            const items: GuestItem[] = [];
             rsvp.adultNames.forEach(name => {
                 if (name.trim()) items.push({ name: name.trim(), type: 'Adult', diet: rsvp.dietaryNotes || '', primary: rsvp.firstName + ' ' + rsvp.lastName });
             });
@@ -566,7 +572,7 @@ export default function AdminPage() {
                                             ⚠️ {rsvp.dietaryNotes}
                                         </p>
                                     )}
-                                    {rsvp.message && <p className="text-sm italic text-purple-400 mt-2 border-l-2 border-purple-200 pl-3">"{rsvp.message}"</p>}
+                                    {rsvp.message && <p className="text-sm italic text-purple-400 mt-2 border-l-2 border-purple-200 pl-3">&quot;{rsvp.message}&quot;</p>}
                                 </div>
                             ))
                         )}

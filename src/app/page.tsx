@@ -16,8 +16,22 @@ export default async function Home() {
         .order('id', { ascending: true });
 
     // Map DB fields and sort chronologically
-    const events = (itineraryData || []).map((item: any) => ({
-        ...item,
+    const events = (itineraryData || []).map((item: {
+        id: string;
+        day: string;
+        title: string;
+        time: string;
+        description: string;
+        dress_code: string;
+        location: string;
+        is_highlight: boolean;
+    }) => ({
+        id: item.id,
+        day: item.day,
+        title: item.title,
+        time: item.time,
+        description: item.description,
+        location: item.location,
         dressCode: item.dress_code,
         isHighlight: item.is_highlight
     })).sort((a, b) => {

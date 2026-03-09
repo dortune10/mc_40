@@ -1,7 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Camera, Heart, Star, Smile } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 const galleryItems = [
     {
@@ -112,10 +113,12 @@ export default function Gallery() {
                                 className={`${item.span} ${item.height} rounded-3xl shadow-soft group relative overflow-hidden bg-purple-50`}
                             >
                                 {/* Actual Photo */}
-                                <img
+                                <Image
                                     src={item.image}
                                     alt={item.alt}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 />
 
                                 {/* Glass Overlay on Hover */}

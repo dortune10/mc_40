@@ -103,10 +103,11 @@ export async function POST(request: NextRequest) {
             { success: true, message: existingRSVP ? 'RSVP updated successfully' : 'RSVP submitted successfully', data },
             { status: 201 }
         );
-    } catch (error: any) {
-        console.error('Error submitting/updating RSVP:', error.message || error);
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error submitting/updating RSVP:', message);
         return NextResponse.json(
-            { error: 'Failed to process RSVP', details: error.message },
+            { error: 'Failed to process RSVP', details: message },
             { status: 500 }
         );
     }
@@ -118,7 +119,7 @@ export async function GET(request: NextRequest) {
         const firstName = searchParams.get('firstName');
         const lastName = searchParams.get('lastName');
 
-        let query = supabase.from('rsvps').select('*');
+        const query = supabase.from('rsvps').select('*');
 
         if (firstName && lastName) {
             const { data, error } = await query
@@ -148,7 +149,18 @@ export async function GET(request: NextRequest) {
         if (error) throw error;
 
         // Map back to camelCase for the UI
-        const mappedData = data.map((item: any) => ({
+        const mappedData = data.map((item: {
+            first_name: string;
+            last_name: string;
+            attending_gala: boolean;
+            attending_brunch: boolean;
+            dietary_notes: string;
+            adult_count: number;
+            child_count: number;
+            adult_names: string;
+            child_names: string;
+            submitted_at: string;
+        }) => ({
             ...item,
             firstName: item.first_name,
             lastName: item.last_name,
@@ -163,9 +175,10 @@ export async function GET(request: NextRequest) {
         }));
 
         return NextResponse.json(mappedData);
-    } catch (error: any) {
-        console.error('Error fetching RSVPs:', error.message || error);
-        return NextResponse.json({ error: 'Failed to fetch RSVPs', details: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error fetching RSVPs:', message);
+        return NextResponse.json({ error: 'Failed to fetch RSVPs', details: message }, { status: 500 });
     }
 }
 
@@ -186,9 +199,10 @@ export async function DELETE(request: NextRequest) {
         if (error) throw error;
 
         return NextResponse.json({ success: true, message: 'Reservation deleted successfully' });
-    } catch (error: any) {
-        console.error('Error deleting RSVP:', error.message || error);
-        return NextResponse.json({ error: 'Failed to delete reservation', details: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error deleting RSVP:', message);
+        return NextResponse.json({ error: 'Failed to delete reservation', details: message }, { status: 500 });
     }
 }
 

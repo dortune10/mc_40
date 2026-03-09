@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Check, Loader2, Users, Search, Plus, Minus, UserPlus } from 'lucide-react';
 
@@ -79,7 +79,7 @@ export default function RSVPForm() {
                 setErrorMessage('No reservation found with that name. You can start a new one!');
                 setStatus('idle');
             }
-        } catch (err) {
+        } catch {
             setErrorMessage('Search failed. Please try again.');
             setStatus('idle');
         }

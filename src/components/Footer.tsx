@@ -1,10 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Instagram, Heart } from 'lucide-react';
+import { Mail, Phone, Instagram, Heart } from 'lucide-react';
 
 export default function Footer() {
-    const currentYear = new Date().getFullYear();
 
     return (
         <footer id="contact" className="bg-purple-950 text-purple-200 py-16 px-6">
