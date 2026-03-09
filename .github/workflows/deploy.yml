@@ -39,5 +39,5 @@ jobs:
             npm install
             npm run build
             
-            # Restart or start the application using PM2
-            pm2 restart mc_40 || pm2 start npm --name "mc_40" -- run start
+            # Restart with updated environment and path
+            pm2 restart mc_40 --update-env || pm2 start npm --name "mc_40" -- run start
