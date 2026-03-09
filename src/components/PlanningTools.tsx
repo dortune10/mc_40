@@ -17,7 +17,7 @@ const planningCards = [
         icon: Plane,
         title: 'Travel Info',
         description:
-            'Flying in? Tampa International Airport (TPA) is just 30 minutes away.',
+            'Flying in? Tocumen International Airport (PTY) is less than 30 minutes to the hotel.',
         buttonText: 'Flight Tips',
         link: '#',
         color: 'purple',
