@@ -312,21 +312,23 @@ export default function RSVPForm({ events }: RSVPFormProps) {
                                         <div className="space-y-3">
                                             <p className="text-purple-200 font-medium">Attending:</p>
                                             <div className="grid gap-3">
-                                                {events.map((event) => (
-                                                    <label key={event.id} className="flex items-center gap-3 glass-dark p-4 rounded-2xl cursor-pointer group">
-                                                        <input
-                                                            type="checkbox"
-                                                            name={`event-${event.title}`}
-                                                            checked={!!formData.attendingEvents[event.title]}
-                                                            onChange={handleChange}
-                                                            className="checkbox-custom"
-                                                        />
-                                                        <div className="flex flex-col">
-                                                            <span className="text-sm font-semibold">{event.title}</span>
-                                                            <span className="text-xs text-purple-300 font-light">{event.day} • {event.time}</span>
-                                                        </div>
-                                                    </label>
-                                                ))}
+                                                {events
+                                                    .filter(event => !event.title.toLowerCase().includes('free day'))
+                                                    .map((event) => (
+                                                        <label key={event.id} className="flex items-center gap-3 glass-dark p-4 rounded-2xl cursor-pointer group">
+                                                            <input
+                                                                type="checkbox"
+                                                                name={`event-${event.title}`}
+                                                                checked={!!formData.attendingEvents[event.title]}
+                                                                onChange={handleChange}
+                                                                className="checkbox-custom"
+                                                            />
+                                                            <div className="flex flex-col">
+                                                                <span className="text-sm font-semibold">{event.title}</span>
+                                                                <span className="text-xs text-purple-300 font-light">{event.day} • {event.time}</span>
+                                                            </div>
+                                                        </label>
+                                                    ))}
                                             </div>
                                         </div>
 
