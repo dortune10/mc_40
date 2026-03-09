@@ -36,7 +36,7 @@ export default async function Home() {
         isHighlight: item.is_highlight
     })).sort((a, b) => {
         // Day Sort Weight
-        const dayWeights: Record<string, number> = { 'Thursday': 1, 'Friday': 2, 'Saturday': 3, 'Sunday': 4 };
+        const dayWeights: Record<string, number> = { 'Wednesday': 0, 'Thursday': 1, 'Friday': 2, 'Saturday': 3, 'Sunday': 4 };
         const getDayWeight = (dayStr: string) => {
             const found = Object.keys(dayWeights).find(d => dayStr.includes(d));
             return found ? dayWeights[found] : 99;

@@ -50,7 +50,7 @@ export default function Itinerary({ events }: ItineraryProps) {
                         viewport={{ once: true }}
                         className="text-amber-500 text-sm uppercase tracking-widest font-semibold"
                     >
-                        July 23 - 26, 2026
+                        July 22 - 26, 2026
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
