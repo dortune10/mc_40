@@ -39,6 +39,6 @@ jobs:
             npm install
             npm run build
             
-            # Use absolute path to next and clean start to avoid 'next not found' or path issues
+            # Clean restart with explicit path to avoid local Mac path inheritance
             pm2 delete mc_40 || true
-            pm2 start "npm run start" --name "mc_40"
+            pm2 start npm --name "mc_40" --cwd /home/dotman/projects/mc_40 -- run start
