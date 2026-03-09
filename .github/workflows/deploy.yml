@@ -21,24 +21,31 @@ jobs:
           port: ${{ secrets.VPS_PORT || 22 }}
           timeout: 60s
           script: |
-            # Ensure the deployment directory exists
-            mkdir -p ${{ secrets.VPS_DEPLOY_PATH }}
-            cd ${{ secrets.VPS_DEPLOY_PATH }}
+            set -e
+            DEPLOY_PATH="${{ secrets.VPS_DEPLOY_PATH }}"
+            echo "Deploying to: $DEPLOY_PATH"
             
-            # If the directory is not a git repository, clone it
+            mkdir -p "$DEPLOY_PATH"
+            cd "$DEPLOY_PATH"
+            
             if [ ! -d ".git" ]; then
-              echo "Repository not found. Cloning..."
-              git clone https://github.com/dortune10/mc_40.git .
-            else
-              # Force pull latest changes
-              git fetch origin
-              git reset --hard origin/main
+              echo "Initializing Git repository in existing directory..."
+              git init
+              git remote add origin https://github.com/dortune10/mc_40.git || true
             fi
             
-            # Install dependencies and build
+            echo "Fetching latest changes from GitHub..."
+            git fetch origin main
+            git reset --hard origin/main
+            
+            echo "Installing dependencies..."
             npm install
+            
+            echo "Building application..."
             npm run build
             
-            # Clean restart with explicit path to avoid local Mac path inheritance
+            echo "Starting PM2 process..."
             pm2 delete mc_40 || true
-            pm2 start npm --name "mc_40" --cwd /home/dotman/projects/mc_40 -- run start
+            pm2 start npm --name "mc_40" --cwd "$DEPLOY_PATH" -- run start
+            
+            echo "✅ Deployment successful!"
